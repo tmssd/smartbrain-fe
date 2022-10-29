@@ -10,16 +10,16 @@ class Signin extends React.Component {
     }
 
     onEmailChange = (event) => {
-        this.setState({signInEmail: event.target.value})
+        this.setState({ signInEmail: event.target.value })
     }
 
     onPasswordChange = (event) => {
-        this.setState({signInPassword: event.target.value})
+        this.setState({ signInPassword: event.target.value })
     }
 
     onSubmitSignIn = () => {
-        // fetch('http://localhost:3000/signin', {
-        fetch('https://rocky-hollows-38848.herokuapp.com/signin', {
+        fetch('http://localhost:3000/signin', {
+            // fetch('https://rocky-hollows-38848.herokuapp.com/signin', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

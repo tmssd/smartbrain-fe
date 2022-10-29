@@ -89,17 +89,17 @@ const particlesOptions = {
 }
 
 const initialState = {
-    input: '',
-    imageUrl: '',
-    box: {},
-    route: 'signin',
-    isSignedIn: false,
-    user: {
-      id: '',
-        name: '',
-        entries: 0,
-        joined: '',
-    }
+  input: '',
+  imageUrl: '',
+  boxes: [],
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+    id: '',
+    name: '',
+    entries: 0,
+    joined: '',
+  }
 }
 
 class App extends React.Component {
@@ -108,39 +108,45 @@ class App extends React.Component {
     this.state = initialState;
   }
 
-// This commented out code was used to check connection between frontend and backend
-/*   componentDidMount() {
-    fetch('http://localhost:3000')
+  // This commented out code was used to check connection between frontend and backend
+  /*   componentDidMount() {
+      fetch('http://localhost:3000')
 
-      .then(response => response.json())
-      .then(console.log)
-  }
- */
+        .then(response => response.json())
+        .then(console.log)
+    }
+   */
 
   loadUser = (data) => {
-    this.setState({user: {
-      id: data.id,
-      name: data.name,
-      entries: data.entries,
-      joined: data.joined,
-    }})
+    this.setState({
+      user: {
+        id: data.id,
+        name: data.name,
+        entries: data.entries,
+        joined: data.joined,
+      }
+    })
   }
 
-  calculateFaceLocation = (data) => {
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
+  calculateFaceLocations = (data) => {
     const image = document.getElementById('inputimage');
     const width = Number(image.width);
     const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - (clarifaiFace.right_col * width),
-      bottomRow: height - (clarifaiFace.bottom_row * height)
-    }
+    return data.outputs[0].data.regions.map((item) => {
+      let clarifaiFace = item.region_info.bounding_box;
+      return {
+        leftCol: clarifaiFace.left_col * width,
+        topRow: clarifaiFace.top_row * height,
+        rightCol: width - (clarifaiFace.right_col * width),
+        bottomRow: height - (clarifaiFace.bottom_row * height)
+      }
+    })
   }
 
-  displayFaceBox = (box) => {
-    this.setState({box: box}) // we could use here ES6 property declaration shortcut: this.setState({box})
+
+  displayFaceBoxes = (boxes) => {
+    this.setState({ boxes: boxes }) // we could use here ES6 property declaration shortcut: this.setState({boxes})
+    // console.log(boxes);
   }
 
   onInputChange = (event) => {
@@ -149,32 +155,32 @@ class App extends React.Component {
 
   onButtonSubmit = () => {
     this.setState({ imageUrl: this.state.input });
-      // fetch('http://localhost:3000/imageurl', {
-    fetch('https://rocky-hollows-38848.herokuapp.com/imageurl', {
-        method: 'post',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          input: this.state.input
-        })
+    fetch('http://localhost:3000/imageurl', {
+      // fetch('https://rocky-hollows-38848.herokuapp.com/imageurl', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        input: this.state.input
       })
+    })
       .then(response => response.json())
       .then(response => {
         if (response) {
-          // fetch('http://localhost:3000/image', {
-          fetch('https://rocky-hollows-38848.herokuapp.com/image', {
+          fetch('http://localhost:3000/image', {
+            // fetch('https://rocky-hollows-38848.herokuapp.com/image', {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               id: this.state.user.id
             })
           })
-          .then(response => response.json())
-          .then(count => {
-            this.setState(Object.assign(this.state.user, {entries: count}))
-          })
-          .catch(console.log)
+            .then(response => response.json())
+            .then(count => {
+              this.setState(Object.assign(this.state.user, { entries: count }))
+            })
+            .catch(console.log)
         }
-        this.displayFaceBox(this.calculateFaceLocation(response))
+        this.displayFaceBoxes(this.calculateFaceLocations(response))
       })
       .catch(err => console.log(err));
   }
@@ -183,13 +189,13 @@ class App extends React.Component {
     if (route === 'signout') {
       this.setState(initialState)
     } else if (route === 'home') {
-      this.setState({isSignedIn: true})
+      this.setState({ isSignedIn: true })
     }
     this.setState({ route: route })
   }
 
   render() {
-    const { isSignedIn, imageUrl, route, box } = this.state;
+    const { isSignedIn, imageUrl, route, boxes } = this.state;
     return (
       <div className="App">
         <Particles className='particles'
@@ -201,19 +207,19 @@ class App extends React.Component {
         <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
         {route === 'home'
           ? <div>
-              <Logo />
-              <Rank name={this.state.user.name} entries={this.state.user.entries}/>
-              <ImageLinkForm
-                onInputChange={this.onInputChange}
-                onButtonSubmit={this.onButtonSubmit}
-              />
-              <FaceRecognition box={box} imageUrl={imageUrl} />
-            </div>
+            <Logo />
+            <Rank name={this.state.user.name} entries={this.state.user.entries} />
+            <ImageLinkForm
+              onInputChange={this.onInputChange}
+              onButtonSubmit={this.onButtonSubmit}
+            />
+            <FaceRecognition boxes={boxes} imageUrl={imageUrl} />
+          </div>
           : (
-              route === 'signin'
+            route === 'signin'
               ? <Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
               : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
-            )
+          )
         }
       </div>
     );
