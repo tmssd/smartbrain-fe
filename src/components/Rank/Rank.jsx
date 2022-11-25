@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Rank = ({ name, entries }) => {
     return (
         <div className='ma4 mt0'>
