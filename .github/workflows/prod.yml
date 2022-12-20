@@ -33,5 +33,5 @@ jobs:
         with:
           context: .
           push: true
-          file: Dockerfile.prod
+          file: docker-compose.prod.yml
           tags: tmssd/smartbrain-front:latest
