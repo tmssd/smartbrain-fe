@@ -10,8 +10,6 @@ RUN npm install
 COPY . .
 # Expose port
 EXPOSE 3001
-# List copied files for visual check
-RUN ls -AlhFH
 # Start the app
 CMD [ "npm", "run", "start:dev" ]
 
