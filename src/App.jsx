@@ -153,6 +153,7 @@ const App = () => {
     const token = window.sessionStorage.getItem('token');
     if (token) {
       fetch('https://smartbrain.thomassoard.com:3000/signin', {
+        mode: 'no-cors',
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -163,6 +164,7 @@ const App = () => {
         .then(data => {
           if (data && data.id) {
             fetch(`https://smartbrain.thomassoard.com:3000/profile/${data.id}`, {
+              mode: 'no-cors',
               method: 'get',
               headers: {
                 'Content-Type': 'application/json',
@@ -216,6 +218,7 @@ const App = () => {
   const onButtonSubmit = () => {
     setImageUrl(input);
     fetch('https://smartbrain.thomassoard.com:3000/imageurl', {
+      mode: 'no-cors',
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -229,6 +232,7 @@ const App = () => {
       .then(response => {
         if (response) {
           fetch('https://smartbrain.thomassoard.com:3000/image', {
+            mode: 'no-cors',
             method: 'put',
             headers: {
               'Content-Type': 'application/json',
