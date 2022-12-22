@@ -18,8 +18,7 @@ const Signin = ({ loadUser, onRouteChange }) => {
   }
 
   const onSubmitSignIn = () => {
-    fetch('http://localhost:3000/signin', {
-      // fetch('https://rocky-hollows-38848.herokuapp.com/signin', {
+    fetch('https://api/signin', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -31,7 +30,7 @@ const Signin = ({ loadUser, onRouteChange }) => {
       .then(data => {
         if (data.userId && data.success === 'true') {
           saveAuthTokenInSession(data.token);
-          fetch(`http://localhost:3000/profile/${data.userId}`, {
+          fetch(`https://api/profile/${data.userId}`, {
             method: 'get',
             headers: {
               'Content-Type': 'application/json',

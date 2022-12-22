@@ -18,8 +18,7 @@ const Register = ({ loadUser, onRouteChange }) => {
   }
 
   const onSubmitSignIn = () => {
-    fetch('http://localhost:3000/register', {
-      // fetch('https://rocky-hollows-38848.herokuapp.com/register', {
+    fetch('https://api/register', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
