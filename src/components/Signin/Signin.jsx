@@ -18,7 +18,7 @@ const Signin = ({ loadUser, onRouteChange }) => {
   }
 
   const onSubmitSignIn = () => {
-    fetch('smartbrain.thomassoard.com:3000/signin', {
+    fetch('http://smartbrain.thomassoard.com:3000/signin', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -30,7 +30,7 @@ const Signin = ({ loadUser, onRouteChange }) => {
       .then(data => {
         if (data.userId && data.success === 'true') {
           saveAuthTokenInSession(data.token);
-          fetch(`smartbrain.thomassoard.com:3000/profile/${data.userId}`, {
+          fetch(`http://smartbrain.thomassoard.com:3000/profile/${data.userId}`, {
             method: 'get',
             headers: {
               'Content-Type': 'application/json',
