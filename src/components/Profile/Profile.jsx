@@ -21,7 +21,7 @@ const Profile = ({ user, toggleModal, loadUser }) => {
   }
 
   const onProfileUpdate = (data) => {
-    fetch(`https://api/profile/${user.id}`, {
+    fetch(`https://smartbrain.thomassoard.com/api/profile/${user.id}`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',

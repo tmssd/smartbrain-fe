@@ -152,7 +152,7 @@ const App = () => {
   useEffect(() => {
     const token = window.sessionStorage.getItem('token');
     if (token) {
-      fetch('https://api/signin', {
+      fetch('https://smartbrain.thomassoard.com/api/signin', {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ const App = () => {
         .then(resp => resp.json())
         .then(data => {
           if (data && data.id) {
-            fetch(`https://api/profile/${data.id}`, {
+            fetch(`https://smartbrain.thomassoard.com/api/profile/${data.id}`, {
               method: 'get',
               headers: {
                 'Content-Type': 'application/json',
@@ -215,7 +215,7 @@ const App = () => {
 
   const onButtonSubmit = () => {
     setImageUrl(input);
-    fetch('https://api/imageurl', {
+    fetch('https://smartbrain.thomassoard.com/api/imageurl', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -228,7 +228,7 @@ const App = () => {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch('https://api/image', {
+          fetch('https://smartbrain.thomassoard.com/api/image', {
             method: 'put',
             headers: {
               'Content-Type': 'application/json',

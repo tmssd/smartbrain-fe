@@ -18,7 +18,7 @@ const Register = ({ loadUser, onRouteChange }) => {
   }
 
   const onSubmitSignIn = () => {
-    fetch('https://api/register', {
+    fetch('https://smartbrain.thomassoard.com/api/register', {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
