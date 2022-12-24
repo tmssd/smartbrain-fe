@@ -7,7 +7,7 @@ export const apiSlice = createApi({
   reducerPath: "api",
   // All of our requests will have URLs starting with '/fakeApi'
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:3000",
+    baseUrl: "https://smartbrain.thomassoard.com/back",
   }),
   // The "endpoints" represent operations and requests for this server
   endpoints: (builder) => ({
