@@ -21,7 +21,7 @@ const Profile = ({ user, toggleModal, loadUser }) => {
   }
 
   const onProfileUpdate = (data) => {
-    fetch(`https://localhost:3000/profile/${user.id}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/profile/${user.id}`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',

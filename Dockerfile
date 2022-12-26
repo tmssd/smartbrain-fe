@@ -11,7 +11,7 @@ COPY . .
 # Expose port
 EXPOSE 3001
 # Start the app
-CMD [ "npm", "run", "start:dev" ]
+CMD [ "npm", "start" ]
 
 FROM node:18-alpine AS builder
 ENV NODE_ENV production

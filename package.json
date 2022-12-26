@@ -22,8 +22,8 @@
     "tsparticles": "^2.5.3"
   },
   "scripts": {
-    "start": "serve -s build",
-    "start:dev": "PORT=3001 BROWSER=google-chrome-stable react-scripts start",
+    "start": "PORT=3001 BROWSER=google-chrome-stable react-scripts start",
+    "start:build": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

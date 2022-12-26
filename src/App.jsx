@@ -151,8 +151,9 @@ const App = () => {
 
   useEffect(() => {
     const token = window.sessionStorage.getItem('token');
+    console.log(process.env);
     if (token) {
-      fetch('https://localhost:3000/signin', {
+      fetch(`${process.env.REACT_APP_API_URL}/signin`, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -162,7 +163,7 @@ const App = () => {
         .then(resp => resp.json())
         .then(data => {
           if (data && data.id) {
-            fetch(`https://localhost:3000/profile/${data.id}`, {
+            fetch(`${process.env.REACT_APP_API_URL}/profile/${data.id}`, {
               method: 'get',
               headers: {
                 'Content-Type': 'application/json',
@@ -215,7 +216,7 @@ const App = () => {
 
   const onButtonSubmit = () => {
     setImageUrl(input);
-    fetch('https://localhost:3000/imageurl', {
+    fetch(`${process.env.REACT_APP_API_URL}/imageurl`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -228,7 +229,7 @@ const App = () => {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch('https://localhost:3000/image', {
+          fetch(`${process.env.REACT_APP_API_URL}/image`, {
             method: 'put',
             headers: {
               'Content-Type': 'application/json',

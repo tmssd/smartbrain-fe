@@ -18,7 +18,7 @@ const Register = ({ loadUser, onRouteChange }) => {
   }
 
   const onSubmitSignIn = () => {
-    fetch('https://localhost:3000/register', {
+    fetch(`${process.env.REACT_APP_API_URL}/register`, {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
