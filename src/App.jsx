@@ -152,7 +152,7 @@ const App = () => {
   useEffect(() => {
     const token = window.sessionStorage.getItem('token');
     if (token) {
-      fetch(`${process.env.REACT_APP_API_URL}/api/signin`, {
+      fetch(`${process.env.REACT_APP_API_URL}/signin`, {
         method: 'post',
         headers: {
           'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ const App = () => {
         .then(resp => resp.json())
         .then(data => {
           if (data && data.id) {
-            fetch(`${process.env.REACT_APP_API_URL}/api/profile/${data.id}`, {
+            fetch(`${process.env.REACT_APP_API_URL}/profile/${data.id}`, {
               method: 'get',
               headers: {
                 'Content-Type': 'application/json',
@@ -215,7 +215,7 @@ const App = () => {
 
   const onButtonSubmit = () => {
     setImageUrl(input);
-    fetch(`${process.env.REACT_APP_API_URL}/api/imageurl`, {
+    fetch(`${process.env.REACT_APP_API_URL}/imageurl`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -228,7 +228,7 @@ const App = () => {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch(`${process.env.REACT_APP_API_URL}/api/image`, {
+          fetch(`${process.env.REACT_APP_API_URL}/image`, {
             method: 'put',
             headers: {
               'Content-Type': 'application/json',
