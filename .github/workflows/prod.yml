@@ -28,10 +28,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
-        name: Build and push
+        name: Build and push smartbrain-fe
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
           file: Dockerfile.prod
-          tags: tmssd/smartbrain-front:latest
+          tags: tmssd/smartbrain-fe:latest

@@ -2,8 +2,8 @@ version: "3.8"
 
 services:
   app:
-    container_name: smartbrain-front-prod
-    image: smartbrain-front-prod
+    container_name: smartbrain-fe-prod
+    image: smartbrain-fe-prod
     build:
       context: .
       target: production
