@@ -10,7 +10,7 @@ Web App that allows users to detect faces in pictures using Clarifai's AI API.
 
 Utilized: ES6, React, Node.js, Express, PostgreSQL, Redis, Docker, knex, bcrypt, JWT, Prettier.
 
-## Launch project
+## Launch app
 
 Clone this repo and `cd` to the project dir:
 
@@ -46,4 +46,4 @@ Dockerized version:
   docker-compose -f docker-compose.prod.yml up --build
   ```
 
-The project will availbale at `localhost:3001`
+The app now availbale at `localhost:3001`
