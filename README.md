@@ -13,16 +13,16 @@ Utilized: ES6, React, Node.js, Express, PostgreSQL, Redis, Docker, knex, bcrypt,
 ## Launch project
 
 Clone this repo and `cd` to the project dir:
-    
-   ```bash
-   git clone git@github.com:tmssd/smartbrain-fe.git && cd smartbrain-fe
-   ```
 
-   or
- 
-   ```bash
-   git clone https://github.com/tmssd/smartbrain-fe.git && cd smartbrain-fe
-   ```
+  ```bash
+  git clone git@github.com:tmssd/smartbrain-fe.git && cd smartbrain-fe
+  ```
+
+  or
+
+  ```bash
+  git clone https://github.com/tmssd/smartbrain-fe.git && cd smartbrain-fe
+  ```
 
 Conventional way:
 
@@ -44,6 +44,6 @@ Dockerized version:
 
   ```bash
   docker-compose -f docker-compose.prod.yml up --build
-  ``` 
+  ```
 
 The project will availbale at `localhost:3001`
