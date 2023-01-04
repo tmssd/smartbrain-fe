@@ -12,16 +12,16 @@ Utilized: ES6, React, Node.js, Express, PostgreSQL, Redis, Docker, knex, bcrypt,
 
 ## Launch project
 
-Clone this repo:
+Clone this repo and `cd` to the project dir:
     
    ```bash
-   git clone git@github.com:tmssd/smartbrain-fe.git
+   git clone git@github.com:tmssd/smartbrain-fe.git && cd smartbrain-fe
    ```
 
    or
  
    ```bash
-   git clone https://github.com/tmssd/smartbrain-fe.git
+   git clone https://github.com/tmssd/smartbrain-fe.git && cd smartbrain-fe
    ```
 
 Conventional way:
