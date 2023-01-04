@@ -1,6 +1,6 @@
 # SmartBrain - frontend
 
-Final project for "The Complete Web Developer: Zero to Mastery" course by [ZTM academy](https://zerotomastery.io/academy/)
+Final project for "The Complete Web Developer: Zero to Mastery" course by [ZTM academy](https://zerotomastery.io/courses/coding-bootcamp/)
 
 ## Description
 
@@ -10,12 +10,38 @@ Utilized: ES6, React, Node.js, Express, PostgreSQL, Redis, Docker, knex, bcrypt,
 
 ## Launch project
 
-### COnventional way
+Clone this repo:
+    
+   ```bash
+   git clone git@github.com:tmssd/smartbrain-fe.git
+   ```
 
-1. Clone this repo
-2. Run `npm install`
-3. Run `npm start`
+   or
+ 
+   ```bash
+   git clone https://github.com/tmssd/smartbrain-fe.git
+   ```
 
-### Dockerized version
+Conventional way:
 
-1. Clone this repo
+```bash
+npm install && npm start
+```
+
+OR
+
+Dockerized version:
+
++ for development version
+
+  ```bash
+  docker-compose -f docker-compose.dev.yml up --build
+  ```
+
++ for production version
+
+  ```bash
+  docker-compose -f docker-compose.prod.yml up --build
+  ``` 
+
+The project will availbale at `localhost:3001`
