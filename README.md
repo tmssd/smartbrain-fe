@@ -1,8 +1,8 @@
 # SmartBrain - frontend
 
-Final project for "The Complete Web Developer: Zero to Mastery" course by [ZTM academy](https://zerotomastery.io/courses/coding-bootcamp/)
+Final project for "The Complete Web Developer: Zero to Mastery" course by [ZTM academy](https://zerotomastery.io/courses/coding-bootcamp/){:target="_blank"}
 
-The backend code available at [smartbrain-be](https://github.com/tmssd/smartbrain-be) repo.
+The backend code available at [smartbrain-be](https://github.com/tmssd/smartbrain-be){:target="_blank"} repo.
 
 ## Description
 
