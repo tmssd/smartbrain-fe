@@ -10,40 +10,58 @@ Web App that allows users to detect faces in pictures using Clarifai's AI API.
 
 Utilized: ES6, React, Node.js, Express, PostgreSQL, Redis, Docker, knex, bcrypt, JWT, Prettier.
 
-## Launch app
+## Setup the app
 
-Clone this repo and `cd` to the project dir:
+1. Clone this repo and `cd` to the project dir
 
-  ```bash
-  git clone git@github.com:tmssd/smartbrain-fe.git && cd smartbrain-fe
-  ```
+    ```bash
+    git clone git@github.com:tmssd/smartbrain-fe.git && cd smartbrain-fe
+    ```
 
-  or
+    or
 
-  ```bash
-  git clone https://github.com/tmssd/smartbrain-fe.git && cd smartbrain-fe
-  ```
+    ```bash
+    git clone https://github.com/tmssd/smartbrain-fe.git && cd smartbrain-fe
+    ```
 
-Conventional way:
+2. Launch the app
 
-```bash
-npm install && npm start
-```
+    Conventional way:
 
-OR
+    ```bash
+    npm install && npm start
+    ```
 
-Dockerized version:
+    OR
 
-+ for development version
+    Dockerized version:
 
-  ```bash
-  docker-compose -f docker-compose.dev.yml up --build
-  ```
+    + for development version
 
-+ for production version
+        for the first setup phase run:
 
-  ```bash
-  docker-compose -f docker-compose.prod.yml up --build
-  ```
+        ```bash
+        docker-compose -f docker-compose.dev.yml up --build
+        ```
 
-The app now availbale at `localhost:3001`
+        otherwise run:
+
+        ```bash
+        docker-compose -f docker-compose.dev.yml up
+        ```
+
+    + for production version
+
+        for the first setup phase run:
+
+        ```bash
+        docker-compose -f docker-compose.prod.yml up --build
+        ```
+
+        otherwise run:
+
+        ```bash
+        docker-compose -f docker-compose.prod.yml up
+        ```
+
+    The app now availbale at `localhost:3001`
