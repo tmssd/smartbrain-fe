@@ -106,7 +106,7 @@ const App = () => {
 
   const [input, setInput] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-  const [boxes, setBoxes] = useState([]);
+  const [boxes, setBoxes] = useState([12]);
   const [route, setRoute] = useState('signin');
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -222,7 +222,7 @@ const App = () => {
         'Authorization': window.sessionStorage.getItem('token')
       },
       body: JSON.stringify({
-        input: input
+        url: input,
       })
     })
       .then(response => response.json())
