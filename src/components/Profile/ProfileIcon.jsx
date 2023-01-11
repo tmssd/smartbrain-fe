@@ -24,7 +24,7 @@ const ProfileIcon = ({ toggleModal, onRouteChange }) => {
           style={{ backgroundColor: 'rgba(255, 255, 255, 0.5)' }}
         >
           <DropdownItem onClick={toggleModal}>View Profile</DropdownItem>
-          <DropdownItem onClick={() => onRouteChange('signout')}>Sign Out</DropdownItem>
+          <DropdownItem onClick={() => { onRouteChange('signout'); window.sessionStorage.removeItem('token'); }}>Sign Out</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>
