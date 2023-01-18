@@ -129,8 +129,13 @@ const App = () => {
     )
   }
 
+  const removeSessionToken = () => {
+    window.sessionStorage.removeItem('token');
+  }
+
   const onRouteChange = (route) => {
     if (route === 'signout') {
+      removeSessionToken();
       setInput('');
       setImageUrl('');
       setBoxes([]);
