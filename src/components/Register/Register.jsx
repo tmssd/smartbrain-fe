@@ -1,9 +1,14 @@
 import { useState } from 'react';
+import { useGetRegisterUserMutation } from '../../features/api/apiSlice';
 
 const Register = ({ loadUser, onRouteChange }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+
+  const saveAuthTokenInSession = (token) => {
+    window.sessionStorage.setItem('token', token);
+  };
 
   const onNameChange = (event) => {
     setName(event.target.value);
@@ -17,19 +22,21 @@ const Register = ({ loadUser, onRouteChange }) => {
     setPassword(event.target.value);
   }
 
+  const [
+    getRegisterUserFromApi,
+    // {
+    // isLoading: isLoadingUser,
+    // isSuccess: isSuccessUser,
+    // isError: isErrorUser,
+    // error: errorUser
+    // }
+  ] = useGetRegisterUserMutation();
+
   const onSubmitSignIn = () => {
-    fetch(`${process.env.REACT_APP_API_URL}/register`, {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: email,
-        password: password,
-        name: name,
-      })
-    })
-      .then(response => response.json())
+    getRegisterUserFromApi({ email: email, password: password, name: name }).unwrap()
       .then(user => {
         if (user.id) {
+          saveAuthTokenInSession(user.token);
           loadUser(user);
           onRouteChange('home');
         }

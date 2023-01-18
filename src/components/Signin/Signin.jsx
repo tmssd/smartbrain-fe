@@ -1,43 +1,55 @@
 import { useState } from 'react';
+import { useGetSigninUserMutation, useGetSigninUserProfileMutation } from '../../features/api/apiSlice';
 import './Signin.css'
 
 const Signin = ({ loadUser, onRouteChange }) => {
+
   const [signInEmail, setSignInEmail] = useState('');
   const [signInPassword, setSignInPassword] = useState('');
 
+  const saveAuthTokenInSession = (token) => {
+    // here we use 'sessionStorage' method of the browser API
+    // wich will store session for the current window only
+    // we could use 'localStorage' as well wich stores the
+    // session throughout the whole browser's windows,
+    // i.e.the current one and the future ones with the same url
+    window.sessionStorage.setItem('token', token);
+  };
+
   const onEmailChange = (event) => {
     setSignInEmail(event.target.value);
-  }
+  };
 
   const onPasswordChange = (event) => {
     setSignInPassword(event.target.value);
-  }
+  };
 
-  const saveAuthTokenInSession = (token) => {
-    window.sessionStorage.setItem('token', token);
-  }
+  const [
+    getSigninUserFromApi,
+    // {
+    // isLoading: isLoadingUser,
+    // isSuccess: isSuccessUser,
+    // isError: isErrorUser,
+    // error: errorUser
+    // }
+  ] = useGetSigninUserMutation();
+
+  const [
+    getSigninUserProfileFromApi,
+    // {
+    // isLoading: isLoadingUserProfile,
+    // isSuccess: isSuccessUserProfile,
+    // isError: isErrorUserProfile,
+    // error: errorUserProfile
+    // }
+  ] = useGetSigninUserProfileMutation();
 
   const onSubmitSignIn = () => {
-    fetch(`${process.env.REACT_APP_API_URL}/signin`, {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: signInEmail,
-        password: signInPassword,
-      })
-    })
-      .then(response => response.json())
+    getSigninUserFromApi({ email: signInEmail, password: signInPassword }).unwrap()
       .then(data => {
         if (data.userId && data.success === 'true') {
           saveAuthTokenInSession(data.token);
-          fetch(`${process.env.REACT_APP_API_URL}/profile/${data.userId}`, {
-            method: 'get',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': data.token
-            }
-          })
-            .then(resp => resp.json())
+          getSigninUserProfileFromApi({ userId: data.userId, token: data.token }).unwrap()
             .then(user => {
               if (user && user.email) {
                 loadUser(user);

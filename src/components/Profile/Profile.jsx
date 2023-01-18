@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useGetUpdateUserProfileMutation } from '../../features/api/apiSlice';
 import './Profile.css';
 
 const Profile = ({ user, toggleModal, loadUser }) => {
@@ -20,20 +21,33 @@ const Profile = ({ user, toggleModal, loadUser }) => {
     }
   }
 
+  const [
+    getUpdateUserProfileFromApi,
+    // {
+    // isLoading: isLoadingUpdateUserProfile,
+    // isSuccess: isSuccessUpdateUserProfile,
+    // isError: isErrorUpdateUserProfile,
+    // error: errorUpdateUserProfile
+    // }
+  ] = useGetUpdateUserProfileMutation();
+
   const onProfileUpdate = (data) => {
-    fetch(`${process.env.REACT_APP_API_URL}/profile/${user.id}`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': window.sessionStorage.getItem('token')
-      },
-      body: JSON.stringify({ formInput: data })
-    }).then(resp => {
-      if (resp.status === 200 || resp.status === 304) {
-        toggleModal();
-        loadUser({ ...user, ...data });
-      }
-    }).catch(console.log);
+    // fetch(`${process.env.REACT_APP_API_URL}/profile/${user.id}`, {
+    //   method: 'post',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': window.sessionStorage.getItem('token')
+    //   },
+    //   body: JSON.stringify({ formInput: data })
+    // })
+    getUpdateUserProfileFromApi({ data, userId: user.id, token: window.sessionStorage.getItem('token') }).unwrap()
+      .then(resp => {
+        // if (resp.status === 200 || resp.status === 304) { // 304 - when browser returns cached version of the response
+        if (resp === 'success') {
+          toggleModal();
+          loadUser({ ...user, ...data });
+        }
+      }).catch(console.log);
   }
 
   return (

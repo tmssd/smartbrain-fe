@@ -10,6 +10,7 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm.jsx';
 import Rank from './components/Rank/Rank.jsx';
 import Modal from './components/Modal/Modal.jsx'
 import Profile from './components/Profile/Profile.jsx';
+import { useGetSigninUserMutation, useGetSigninUserProfileMutation } from './features/api/apiSlice';
 import './App.css';
 
 const particlesOptions = {
@@ -149,27 +150,35 @@ const App = () => {
     setRoute(route);
   }
 
+  const [
+    getSigninUserFromApi,
+    // {
+    // isLoading: isLoadingUser,
+    // isSuccess: isSuccessUser,
+    // isError: isErrorUser,
+    // error: errorUser
+    // }
+  ] = useGetSigninUserMutation();
+
+  const [
+    getSigninUserProfileFromApi,
+    // {
+    // isLoading: isLoadingUserProfile,
+    // isSuccess: isSuccessUserProfile,
+    // isError: isErrorUserProfile,
+    // error: errorUserProfile
+    // }
+  ] = useGetSigninUserProfileMutation();
+
+
+  // on component re-render(e.g. on page refresh) check if user already logged in
   useEffect(() => {
     const token = window.sessionStorage.getItem('token');
     if (token) {
-      fetch(`${process.env.REACT_APP_API_URL}/signin`, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': token
-        }
-      })
-        .then(resp => resp.json())
+      getSigninUserFromApi({ token }).unwrap()
         .then(data => {
           if (data && data.id) {
-            fetch(`${process.env.REACT_APP_API_URL}/profile/${data.id}`, {
-              method: 'get',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-              }
-            })
-              .then(resp => resp.json())
+            getSigninUserProfileFromApi({ userId: data.id, token }).unwrap()
               .then(user => {
                 if (user && user.email) {
                   loadUser(user);
@@ -183,7 +192,7 @@ const App = () => {
     //  return () => {
     //    second
     //  }
-  }, []);
+  }, [getSigninUserFromApi, getSigninUserProfileFromApi]);
 
   const calculateFaceLocations = (data) => {
     if (data && data.outputs) {
