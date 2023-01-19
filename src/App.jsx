@@ -133,7 +133,7 @@ const App = () => {
     window.sessionStorage.removeItem('token');
   }
 
-  const onRouteChange = (route) => {
+  const onRouteChange = useCallback((route) => {
     if (route === 'signout') {
       removeSessionToken();
       setInput('');
@@ -153,7 +153,7 @@ const App = () => {
       setIsSignedIn(true);
     }
     setRoute(route);
-  }
+  }, [])
 
   const [
     getSigninUserFromApi,
@@ -197,7 +197,7 @@ const App = () => {
     //  return () => {
     //    second
     //  }
-  }, [getSigninUserFromApi, getSigninUserProfileFromApi]);
+  }, [onRouteChange, getSigninUserFromApi, getSigninUserProfileFromApi]);
 
   const calculateFaceLocations = (data) => {
     if (data && data.outputs) {
