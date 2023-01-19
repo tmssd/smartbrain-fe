@@ -10,7 +10,7 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm.jsx';
 import Rank from './components/Rank/Rank.jsx';
 import Modal from './components/Modal/Modal.jsx'
 import Profile from './components/Profile/Profile.jsx';
-import { useGetSigninUserMutation, useGetSigninUserProfileMutation } from './features/api/apiSlice';
+import { useGetSigninUserMutation, useGetSigninUserProfileMutation, useDeleteLogoutUserTokenMutation } from './features/api/apiSlice';
 import './App.css';
 
 const particlesOptions = {
@@ -129,32 +129,6 @@ const App = () => {
     )
   }
 
-  const removeSessionToken = () => {
-    window.sessionStorage.removeItem('token');
-  }
-
-  const onRouteChange = useCallback((route) => {
-    if (route === 'signout') {
-      removeSessionToken();
-      setInput('');
-      setImageUrl('');
-      setBoxes([]);
-      setRoute('signin');
-      setIsSignedIn(false);
-      setIsProfileOpen(false);
-      setUser({
-        id: '',
-        name: '',
-        entries: 0,
-        joined: ''
-      });
-      return
-    } else if (route === 'home') {
-      setIsSignedIn(true);
-    }
-    setRoute(route);
-  }, [])
-
   const [
     getSigninUserFromApi,
     // {
@@ -175,6 +149,42 @@ const App = () => {
     // }
   ] = useGetSigninUserProfileMutation();
 
+  const [
+    deleteLogoutUserTokenFromApi,
+    // {
+    // isLoading: isLoadingUser,
+    // isSuccess: isSuccessUser,
+    // isError: isErrorUser,
+    // error: errorUser
+    // }
+  ] = useDeleteLogoutUserTokenMutation();
+
+  const removeSessionToken = () => {
+    window.sessionStorage.removeItem('token');
+  }
+
+  const onRouteChange = useCallback((route) => {
+    if (route === 'signout') {
+      deleteLogoutUserTokenFromApi({ userId: user.id, token: window.sessionStorage.getItem('token') });
+      removeSessionToken();
+      setInput('');
+      setImageUrl('');
+      setBoxes([]);
+      setRoute('signin');
+      setIsSignedIn(false);
+      setIsProfileOpen(false);
+      setUser({
+        id: '',
+        name: '',
+        entries: 0,
+        joined: ''
+      });
+      return
+    } else if (route === 'home') {
+      setIsSignedIn(true);
+    }
+    setRoute(route);
+  }, [deleteLogoutUserTokenFromApi, user.id])
 
   // on component re-render(e.g. on page refresh) check if user already logged in
   useEffect(() => {

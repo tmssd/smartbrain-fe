@@ -67,6 +67,18 @@ export const apiSlice = createApi({
         };
       },
     }),
+    deleteLogoutUserToken: builder.mutation({
+      query: ({ userId, token }) => {
+        return {
+          url: '/logout',
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: { userId, token },
+        };
+      },
+    }),
   }),
 });
 
@@ -76,4 +88,5 @@ export const {
   useGetSigninUserProfileMutation,
   useGetRegisterUserMutation,
   useGetUpdateUserProfileMutation,
+  useDeleteLogoutUserTokenMutation,
 } = apiSlice;
