@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   useGetSigninUserMutation,
   useGetSigninUserProfileMutation,
@@ -7,6 +8,7 @@ import {
   useUpdateUserImageEntriesMutation,
 }
   from './features/api/apiSlice';
+import { loadUser, resetUser } from './features/user/userSlice';
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
 import FaceRecognition from './components/FaceRecognition/FaceRecognition.jsx';
@@ -118,23 +120,10 @@ const App = () => {
   const [route, setRoute] = useState('signin');
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [user, setUser] = useState({
-    id: '',
-    name: '',
-    entries: 0,
-    joined: '',
-  });
 
-  const loadUser = (data) => {
-    setUser(
-      {
-        id: data.id,
-        name: data.name,
-        entries: data.entries,
-        joined: data.joined,
-      }
-    )
-  }
+  const user = useSelector(state => state.user);
+
+  const dispatch = useDispatch();
 
   const [
     getSigninUserFromApi,
@@ -180,18 +169,13 @@ const App = () => {
       setRoute('signin');
       setIsSignedIn(false);
       setIsProfileOpen(false);
-      setUser({
-        id: '',
-        name: '',
-        entries: 0,
-        joined: ''
-      });
+      dispatch(resetUser());
       return
     } else if (route === 'home') {
       setIsSignedIn(true);
     }
     setRoute(route);
-  }, [deleteLogoutUserTokenFromApi, user.id])
+  }, [deleteLogoutUserTokenFromApi, user.id, dispatch])
 
   // on component re-render(e.g. on page refresh) check if user already logged in
   useEffect(() => {
@@ -203,7 +187,7 @@ const App = () => {
             getSigninUserProfileFromApi({ userId: data.id, token }).unwrap()
               .then(user => {
                 if (user && user.email) {
-                  loadUser(user);
+                  dispatch(loadUser(user));
                   onRouteChange('home');
                 }
               })
@@ -214,7 +198,7 @@ const App = () => {
     //  return () => {
     //    second
     //  }
-  }, [onRouteChange, getSigninUserFromApi, getSigninUserProfileFromApi]);
+  }, [onRouteChange, getSigninUserFromApi, getSigninUserProfileFromApi, dispatch]);
 
   const calculateFaceLocations = (data) => {
     if (data && data.outputs) {
@@ -271,7 +255,7 @@ const App = () => {
         if (response) {
           updateUserImageEntriesFromApi({ userId: user.id, token: window.sessionStorage.getItem('token') }).unwrap()
             .then(count => {
-              setUser({ ...user, entries: count })
+              dispatch(loadUser({ ...user, entries: count }));
             })
             .catch(console.log)
         }
@@ -300,7 +284,7 @@ const App = () => {
           <Profile
             isProfileOpen={isProfileOpen}
             toggleModal={toggleModal}
-            loadUser={loadUser}
+            // loadUser={loadUser}
             user={user}
           />
         </Modal>
@@ -317,8 +301,8 @@ const App = () => {
         </div>
         : (
           route === 'signin'
-            ? <Signin loadUser={loadUser} onRouteChange={onRouteChange} />
-            : <Register loadUser={loadUser} onRouteChange={onRouteChange} />
+            ? <Signin onRouteChange={onRouteChange} />
+            : <Register onRouteChange={onRouteChange} />
         )
       }
     </div>

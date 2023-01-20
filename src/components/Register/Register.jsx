@@ -1,25 +1,29 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { loadUser } from '../../features/user/userSlice';
 import { useGetRegisterUserMutation } from '../../features/api/apiSlice';
 
-const Register = ({ loadUser, onRouteChange }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+const Register = ({ onRouteChange }) => {
+  const [registerEmail, setRegisterEmail] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
+  const [registerName, setRegisterName] = useState('');
+
+  const dispatch = useDispatch();
 
   const saveAuthTokenInSession = (token) => {
     window.sessionStorage.setItem('token', token);
   };
 
   const onNameChange = (event) => {
-    setName(event.target.value);
+    setRegisterName(event.target.value);
   }
 
   const onEmailChange = (event) => {
-    setEmail(event.target.value);
+    setRegisterEmail(event.target.value);
   }
 
   const onPasswordChange = (event) => {
-    setPassword(event.target.value);
+    setRegisterPassword(event.target.value);
   }
 
   const [
@@ -33,11 +37,11 @@ const Register = ({ loadUser, onRouteChange }) => {
   ] = useGetRegisterUserMutation();
 
   const onSubmitSignIn = () => {
-    getRegisterUserFromApi({ email: email, password: password, name: name }).unwrap()
+    getRegisterUserFromApi({ email: registerEmail, password: registerPassword, name: registerName }).unwrap()
       .then(user => {
         if (user.id) {
           saveAuthTokenInSession(user.token);
-          loadUser(user);
+          dispatch(loadUser(user));
           onRouteChange('home');
         }
       })

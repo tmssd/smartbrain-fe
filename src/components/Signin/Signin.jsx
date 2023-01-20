@@ -1,11 +1,15 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { loadUser } from '../../features/user/userSlice';
 import { useGetSigninUserMutation, useGetSigninUserProfileMutation } from '../../features/api/apiSlice';
 import './Signin.css'
 
-const Signin = ({ loadUser, onRouteChange }) => {
+const Signin = ({ onRouteChange }) => {
 
   const [signInEmail, setSignInEmail] = useState('');
   const [signInPassword, setSignInPassword] = useState('');
+
+  const dispatch = useDispatch();
 
   const saveAuthTokenInSession = (token) => {
     // here we use 'sessionStorage' method of the browser API
@@ -52,7 +56,7 @@ const Signin = ({ loadUser, onRouteChange }) => {
           getSigninUserProfileFromApi({ userId: data.userId, token: data.token }).unwrap()
             .then(user => {
               if (user && user.email) {
-                loadUser(user);
+                dispatch(loadUser(user));
                 onRouteChange('home');
               }
             })

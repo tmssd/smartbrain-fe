@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-// import signinReducer from '../components/signin/signinSlice';
+import userReducer from '../features/user/userSlice';
 import { apiSlice } from '../features/api/apiSlice';
 
 export default configureStore({
   reducer: {
-    // signin: signinReducer,
+    user: userReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>

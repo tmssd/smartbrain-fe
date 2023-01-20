@@ -1,13 +1,14 @@
 import {
-  createEntityAdapter,
+  // createEntityAdapter,
   createSlice,
-  nanoid,
-  createSelector,
+  // nanoid,
+  // createSelector,
 } from '@reduxjs/toolkit';
 
 const initialState = {
   id: '',
   name: '',
+  email: '',
   entries: 0,
   joined: '',
 };
@@ -16,31 +17,19 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    // signInCredentialsAdded: {
-    //   reducer(state, action) {
-    //     state = action.payload;
-    //   },
-    //   prepare(email, password) {
-    //     return {
-    //       payload: {
-    //         signInEmailAdded: email,
-    //         signInPassword: password,
-    //       },
-    //     };
-    //   },
-    // },
-    // setUser(state, action) {
-    //   // console.log(state);
-    //   // console.log(action);
-    //   state = action.payload;
-    // },
-    loadUser(state, action) {
-      state = action.payload;
+    loadUser: {
+      reducer(state, action) {
+        return (state = { ...state, ...action.payload });
+      },
+      prepare(data) {
+        return {
+          payload: data,
+        };
+      },
     },
-    initUser: (state) => (state = initialState),
+    resetUser: (state) => (state = initialState),
   },
 });
 
-export const { loadUser, setUser, signInCredentialsAdded, initUser } =
-  userSlice.actions;
+export const { loadUser, resetUser } = userSlice.actions;
 export default userSlice.reducer;

@@ -1,14 +1,20 @@
 import { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { loadUser } from '../../features/user/userSlice';
 import { useGetUpdateUserProfileMutation } from '../../features/api/apiSlice';
 import './Profile.css';
 
-const Profile = ({ user, toggleModal, loadUser }) => {
-  const [name, setName] = useState(user.name)
+
+const Profile = ({ toggleModal }) => {
+  const user = useSelector(state => state.user);
+  const [updateName, setUpdatedName] = useState(user.name);
+
+  const dispatch = useDispatch();
 
   const onFormChange = (event) => {
     switch (event.target.name) {
       case 'user-name':
-        setName(event.target.value)
+        setUpdatedName(event.target.value);
         break;
       // case 'user-age':
       //   this.setState({ age: event.target.value })
@@ -45,7 +51,7 @@ const Profile = ({ user, toggleModal, loadUser }) => {
         // if (resp.status === 200 || resp.status === 304) { // 304 - when browser returns cached version of the response
         if (resp === 'success') {
           toggleModal();
-          loadUser({ ...user, ...data });
+          dispatch(loadUser(data));
         }
       }).catch(console.log);
   }
@@ -55,7 +61,7 @@ const Profile = ({ user, toggleModal, loadUser }) => {
       <article className="br3 ba b--black-10 mv4 w-100 w-50-m w-25-l mw6 shadow-5 center bg-white">
         <main className="pa4 black-80 w-80">
           <img src="https://images.rawpixel.com/image_png_1300/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvdjgzMi10ZS0wMl8xLnBuZw.png" className="h3 w3 dib" alt="avatar" />
-          <h1>{name}</h1>
+          <h1>{updateName}</h1>
           <h4>{`Images Submitted: ${user.entries}`}</h4>
           <p>{`Member since: ${new Date(user.joined).toLocaleDateString()}`}</p>
           <hr />
@@ -88,7 +94,7 @@ const Profile = ({ user, toggleModal, loadUser }) => {
           />
           <div className="mt4" style={{ display: "flex", justifyContent: "space-evenly" }}>
             <button
-              onClick={() => onProfileUpdate({ name })}
+              onClick={() => onProfileUpdate({ name: updateName })}
               // onClick={() => onProfileUpdate({ name, age, pet })}
               className="b pa2 grow pointer hover-white w-40 bg-light-blue b--black-20">
               Save
