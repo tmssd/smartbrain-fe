@@ -79,6 +79,32 @@ export const apiSlice = createApi({
         };
       },
     }),
+    getApiCallData: builder.mutation({
+      query: ({ imageUrl, token }) => {
+        return {
+          url: 'imageurl',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: token,
+          },
+          body: { url: imageUrl },
+        };
+      },
+    }),
+    updateUserImageEntries: builder.mutation({
+      query: ({ userId, token }) => {
+        return {
+          url: 'image',
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: token,
+          },
+          body: { id: userId },
+        };
+      },
+    }),
   }),
 });
 
@@ -89,4 +115,6 @@ export const {
   useGetRegisterUserMutation,
   useGetUpdateUserProfileMutation,
   useDeleteLogoutUserTokenMutation,
+  useGetApiCallDataMutation,
+  useUpdateUserImageEntriesMutation,
 } = apiSlice;

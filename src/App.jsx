@@ -1,4 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
+import {
+  useGetSigninUserMutation,
+  useGetSigninUserProfileMutation,
+  useDeleteLogoutUserTokenMutation,
+  useGetApiCallDataMutation,
+  useUpdateUserImageEntriesMutation,
+}
+  from './features/api/apiSlice';
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
 import FaceRecognition from './components/FaceRecognition/FaceRecognition.jsx';
@@ -10,7 +18,6 @@ import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm.jsx';
 import Rank from './components/Rank/Rank.jsx';
 import Modal from './components/Modal/Modal.jsx'
 import Profile from './components/Profile/Profile.jsx';
-import { useGetSigninUserMutation, useGetSigninUserProfileMutation, useDeleteLogoutUserTokenMutation } from './features/api/apiSlice';
 import './App.css';
 
 const particlesOptions = {
@@ -132,30 +139,30 @@ const App = () => {
   const [
     getSigninUserFromApi,
     // {
-    // isLoading: isLoadingUser,
-    // isSuccess: isSuccessUser,
-    // isError: isErrorUser,
-    // error: errorUser
+    // isLoading: isLoadingSigninUserFromApi,
+    // isSuccess: isSuccessSigninUserFromApi,
+    // isError: isErrorSigninUserFromApi,
+    // error: errorSigninUserFromApi,
     // }
   ] = useGetSigninUserMutation();
 
   const [
     getSigninUserProfileFromApi,
     // {
-    // isLoading: isLoadingUserProfile,
-    // isSuccess: isSuccessUserProfile,
-    // isError: isErrorUserProfile,
-    // error: errorUserProfile
+    // isLoading: isLoadingSigninUserProfileFromApi,
+    // isSuccess: isSuccessSigninUserProfileFromApi,
+    // isError: isErrorSigninUserProfileFromApi,
+    // error: errorSigninUserProfileFromApi,
     // }
   ] = useGetSigninUserProfileMutation();
 
   const [
     deleteLogoutUserTokenFromApi,
     // {
-    // isLoading: isLoadingUser,
-    // isSuccess: isSuccessUser,
-    // isError: isErrorUser,
-    // error: errorUser
+    // isLoading: isLoadingLogoutUserTokenFromApi,
+    // isSuccess: isSuccessLogoutUserTokenFromApi,
+    // isError: isErrorLogoutUserTokenFromApi,
+    // error: errorULogoutserTokenFromApi,
     // }
   ] = useDeleteLogoutUserTokenMutation();
 
@@ -237,32 +244,32 @@ const App = () => {
     setInput(event.target.value);
   }
 
+  const [
+    getApiCallDataFromApi,
+    // {
+    // isLoading: isLoadingSigninUserFromApi,
+    // isSuccess: isSuccessSigninUserFromApi,
+    // isError: isErrorSigninUserFromApi,
+    // error: errorSigninUserFromApi,
+    // }
+  ] = useGetApiCallDataMutation();
+
+  const [
+    updateUserImageEntriesFromApi,
+    // {
+    // isLoading: isLoadingSigninUserFromApi,
+    // isSuccess: isSuccessSigninUserFromApi,
+    // isError: isErrorSigninUserFromApi,
+    // error: errorSigninUserFromApi,
+    // }
+  ] = useUpdateUserImageEntriesMutation();
+
   const onButtonSubmit = () => {
     setImageUrl(input);
-    fetch(`${process.env.REACT_APP_API_URL}/imageurl`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': window.sessionStorage.getItem('token')
-      },
-      body: JSON.stringify({
-        url: input,
-      })
-    })
-      .then(response => response.json())
+    getApiCallDataFromApi({ imageUrl: input, token: window.sessionStorage.getItem('token') }).unwrap()
       .then(response => {
         if (response) {
-          fetch(`${process.env.REACT_APP_API_URL}/image`, {
-            method: 'put',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': window.sessionStorage.getItem('token')
-            },
-            body: JSON.stringify({
-              id: user.id
-            })
-          })
-            .then(response => response.json())
+          updateUserImageEntriesFromApi({ userId: user.id, token: window.sessionStorage.getItem('token') }).unwrap()
             .then(count => {
               setUser({ ...user, entries: count })
             })
