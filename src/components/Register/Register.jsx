@@ -1,13 +1,15 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loadUser } from '../../features/user/userSlice';
 import { useGetRegisterUserMutation } from '../../features/api/apiSlice';
 
-const Register = ({ onRouteChange }) => {
+const Register = () => {
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
   const [registerName, setRegisterName] = useState('');
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const saveAuthTokenInSession = (token) => {
@@ -42,7 +44,7 @@ const Register = ({ onRouteChange }) => {
         if (user.id) {
           saveAuthTokenInSession(user.token);
           dispatch(loadUser(user));
-          onRouteChange('home');
+          navigate('/user', { replace: true });
         }
       })
   }
@@ -90,6 +92,9 @@ const Register = ({ onRouteChange }) => {
               className="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
               type="submit"
               value="Register" />
+          </div>
+          <div className="lh-copy mt3">
+            <Link to='/' className="f6 link dim black db pointer">Sign In</Link>
           </div>
         </div>
       </main>

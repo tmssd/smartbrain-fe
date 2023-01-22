@@ -1,268 +1,32 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  useGetSigninUserMutation,
-  useGetSigninUserProfileMutation,
-  useDeleteLogoutUserTokenMutation,
-  useGetApiCallDataMutation,
-  useUpdateUserImageEntriesMutation,
-}
-  from './features/api/apiSlice';
-import { loadUser, resetUser } from './features/user/userSlice';
-import Particles from "react-particles";
-import { loadFull } from "tsparticles";
-import FaceRecognition from './components/FaceRecognition/FaceRecognition.jsx';
-import Navigation from './components/Navigation/Navigation.jsx';
+import { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { Userpage } from './pages/Userpage/Userpage';
+import { Notfoundpage } from './pages/Notfoundpage/Notfoundpage';
+import { Layout } from './components/Layout/Layout';
 import Signin from './components/Signin/Signin.jsx';
 import Register from './components/Register/Register.jsx';
-import Logo from './components/Logo/Logo.jsx';
-import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm.jsx';
-import Rank from './components/Rank/Rank.jsx';
-import Modal from './components/Modal/Modal.jsx'
-import Profile from './components/Profile/Profile.jsx';
-import './App.css';
-
-const particlesOptions = {
-  // background: {
-  //   color: {
-  //     value: "#0d47a1",
-  //   },
-  // },
-  fpsLimit: 60,
-  interactivity: {
-    detectsOn: "canvas",
-    events: {
-      onClick: {
-        enable: false,
-        mode: "push",
-      },
-      onHover: {
-        enable: false,
-        mode: "repulse",
-      },
-      resize: true,
-    },
-    modes: {
-      bubble: {
-        distance: 400,
-        duration: 2,
-        opacity: 0.8,
-        size: 40,
-      },
-      push: {
-        quantity: 4,
-      },
-      repulse: {
-        distance: 200,
-        duration: 0.4,
-      },
-    },
-  },
-  particles: {
-    color: {
-      value: "#ffffff",
-    },
-    links: {
-      color: "#ffffff",
-      distance: 150,
-      enable: true,
-      opacity: 0.5,
-      width: 1,
-    },
-    collisions: {
-      enable: true,
-    },
-    move: {
-      direction: "none",
-      enable: true,
-      outMode: "bounce",
-      random: false,
-      speed: 1.5,
-      straight: false,
-    },
-    number: {
-      density: {
-        enable: true,
-        value_area: 800,
-      },
-      value: 80,
-    },
-    opacity: {
-      value: 0.5,
-    },
-    shape: {
-      type: "circle",
-    },
-    size: {
-      random: true,
-      value: 5,
-    },
-  },
-  detectRetina: true,
-}
 
 const App = () => {
-  const particlesInit = useCallback(async engine => {
-    // console.log(engine);
-    // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
-    // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-    // starting from v2 you can add only the features you need reducing the bundle size
-    await loadFull(engine);
-  }, []);
-
-  const particlesLoaded = useCallback(async container => {
-    // await console.log(container);
-  }, []);
-
-  const [input, setInput] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
-  const [boxes, setBoxes] = useState([12]);
-  const [route, setRoute] = useState('signin');
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
-  const user = useSelector(state => state.user);
-
-  const dispatch = useDispatch();
-
-  const [
-    getSigninUserFromApi,
-    // {
-    // isLoading: isLoadingSigninUserFromApi,
-    // isSuccess: isSuccessSigninUserFromApi,
-    // isError: isErrorSigninUserFromApi,
-    // error: errorSigninUserFromApi,
-    // }
-  ] = useGetSigninUserMutation();
-
-  const [
-    getSigninUserProfileFromApi,
-    // {
-    // isLoading: isLoadingSigninUserProfileFromApi,
-    // isSuccess: isSuccessSigninUserProfileFromApi,
-    // isError: isErrorSigninUserProfileFromApi,
-    // error: errorSigninUserProfileFromApi,
-    // }
-  ] = useGetSigninUserProfileMutation();
-
-  const [
-    deleteLogoutUserTokenFromApi,
-    // {
-    // isLoading: isLoadingLogoutUserTokenFromApi,
-    // isSuccess: isSuccessLogoutUserTokenFromApi,
-    // isError: isErrorLogoutUserTokenFromApi,
-    // error: errorULogoutserTokenFromApi,
-    // }
-  ] = useDeleteLogoutUserTokenMutation();
-
-  const removeSessionToken = () => {
-    window.sessionStorage.removeItem('token');
-  }
-
-  const onRouteChange = useCallback((route) => {
-    if (route === 'signout') {
-      deleteLogoutUserTokenFromApi({ userId: user.id, token: window.sessionStorage.getItem('token') });
-      removeSessionToken();
-      setInput('');
-      setImageUrl('');
-      setBoxes([]);
-      setRoute('signin');
-      setIsSignedIn(false);
-      setIsProfileOpen(false);
-      dispatch(resetUser());
-      return
-    } else if (route === 'home') {
-      setIsSignedIn(true);
-    }
-    setRoute(route);
-  }, [deleteLogoutUserTokenFromApi, user.id, dispatch])
-
-  // on component re-render(e.g. on page refresh) check if user already logged in
-  useEffect(() => {
-    const token = window.sessionStorage.getItem('token');
-    if (token) {
-      getSigninUserFromApi({ token }).unwrap()
-        .then(data => {
-          if (data && data.id) {
-            getSigninUserProfileFromApi({ userId: data.id, token }).unwrap()
-              .then(user => {
-                if (user && user.email) {
-                  dispatch(loadUser(user));
-                  onRouteChange('home');
-                }
-              })
-          }
-        })
-        .catch(console.log());
-    }
-    //  return () => {
-    //    second
-    //  }
-  }, [onRouteChange, getSigninUserFromApi, getSigninUserProfileFromApi, dispatch]);
-
-  const calculateFaceLocations = (data) => {
-    if (data && data.outputs) {
-      const image = document.getElementById('inputimage');
-      const width = Number(image.width);
-      const height = Number(image.height);
-      return data.outputs[0].data.regions.map((face) => {
-        let clarifaiFace = face.region_info.bounding_box;
-        return {
-          leftCol: clarifaiFace.left_col * width,
-          topRow: clarifaiFace.top_row * height,
-          rightCol: width - (clarifaiFace.right_col * width),
-          bottomRow: height - (clarifaiFace.bottom_row * height)
-        }
-      })
-    }
-    return;
-  }
-
-  const displayFaceBoxes = (boxes) => {
-    if (boxes) {
-      setBoxes(boxes);
-    }
-  }
-
-  const onInputChange = (event) => {
-    setInput(event.target.value);
-  }
-
-  const [
-    getApiCallDataFromApi,
-    // {
-    // isLoading: isLoadingSigninUserFromApi,
-    // isSuccess: isSuccessSigninUserFromApi,
-    // isError: isErrorSigninUserFromApi,
-    // error: errorSigninUserFromApi,
-    // }
-  ] = useGetApiCallDataMutation();
-
-  const [
-    updateUserImageEntriesFromApi,
-    // {
-    // isLoading: isLoadingSigninUserFromApi,
-    // isSuccess: isSuccessSigninUserFromApi,
-    // isError: isErrorSigninUserFromApi,
-    // error: errorSigninUserFromApi,
-    // }
-  ] = useUpdateUserImageEntriesMutation();
-
-  const onButtonSubmit = () => {
-    setImageUrl(input);
-    getApiCallDataFromApi({ imageUrl: input, token: window.sessionStorage.getItem('token') }).unwrap()
-      .then(response => {
-        if (response) {
-          updateUserImageEntriesFromApi({ userId: user.id, token: window.sessionStorage.getItem('token') }).unwrap()
-            .then(count => {
-              dispatch(loadUser({ ...user, entries: count }));
-            })
-            .catch(console.log)
-        }
-        displayFaceBoxes(calculateFaceLocations(response))
-      })
-      .catch(err => console.log(err));
-  }
+  // const onRouteChange = useCallback((route) => {
+  //   if (route === 'signout') {
+  //     deleteLogoutUserTokenFromApi({ userId: user.id, token: window.sessionStorage.getItem('token') });
+  //     removeSessionToken();
+  //     setInput('');
+  //     setImageUrl('');
+  //     setBoxes([]);
+  //     setRoute('signin');
+  //     setIsSignedIn(false);
+  //     setIsProfileOpen(false);
+  //     dispatch(resetUser());
+  //     return
+  //   } else if (route === 'home') {
+  //     setIsSignedIn(true);
+  //   }
+  //   setRoute(route);
+  // }, [deleteLogoutUserTokenFromApi, user.id, dispatch])
 
   const toggleModal = () => {
     setIsProfileOpen(
@@ -271,41 +35,16 @@ const App = () => {
   }
 
   return (
-    <div className="App">
-      <Particles className='particles'
-        id="tsparticles"
-        init={particlesInit}
-        loaded={particlesLoaded}
-        options={particlesOptions}
-      />
-      <Navigation isSignedIn={isSignedIn} onRouteChange={onRouteChange} toggleModal={toggleModal} />
-      {isProfileOpen &&
-        <Modal>
-          <Profile
-            isProfileOpen={isProfileOpen}
-            toggleModal={toggleModal}
-            // loadUser={loadUser}
-            user={user}
-          />
-        </Modal>
-      }
-      {route === 'home'
-        ? <div>
-          <Logo />
-          <Rank name={user.name} entries={user.entries} />
-          <ImageLinkForm
-            onInputChange={onInputChange}
-            onButtonSubmit={onButtonSubmit}
-          />
-          <FaceRecognition boxes={boxes} imageUrl={imageUrl} />
-        </div>
-        : (
-          route === 'signin'
-            ? <Signin onRouteChange={onRouteChange} />
-            : <Register onRouteChange={onRouteChange} />
-        )
-      }
-    </div>
+    <>
+      <Routes>
+        <Route path="/" element={<Layout isSignedIn={isSignedIn} setIsSignedIn={setIsSignedIn} toggleModal={toggleModal} />}>
+          <Route index element={<Signin />} />
+          <Route path="register" element={<Register />} />
+          <Route path="user" element={<Userpage setIsSignedIn={setIsSignedIn} isProfileOpen={isProfileOpen} toggleModal={toggleModal} />} />
+          <Route path="*" element={<Notfoundpage />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
 

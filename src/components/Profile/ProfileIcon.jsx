@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useDeleteLogoutUserTokenMutation } from '../../features/api/apiSlice.js';
+import { resetUser } from '../../features/user/userSlice';
 import {
   Dropdown,
   DropdownToggle,
@@ -6,12 +10,37 @@ import {
   DropdownItem,
 } from 'reactstrap';
 
-const ProfileIcon = ({ toggleModal, onRouteChange }) => {
+const ProfileIcon = ({ setIsSignedIn, toggleModal }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const user = useSelector(state => state.user);
+
+  const dispatch = useDispatch();
 
   const toggle = () => {
     setDropdownOpen((dropdownOpen) => !dropdownOpen)
   };
+
+  const [
+    deleteLogoutUserTokenFromApi,
+    // {
+    // isLoading: isLoadingLogoutUserTokenFromApi,
+    // isSuccess: isSuccessLogoutUserTokenFromApi,
+    // isError: isErrorLogoutUserTokenFromApi,
+    // error: errorULogoutserTokenFromApi,
+    // }
+  ] = useDeleteLogoutUserTokenMutation();
+
+  const removeSessionToken = () => {
+    window.sessionStorage.removeItem('token');
+  }
+
+  const handleSignout = () => {
+    removeSessionToken();
+    deleteLogoutUserTokenFromApi({ userId: user.id, token: window.sessionStorage.getItem('token') });
+    setIsSignedIn(false);
+    dispatch(resetUser());
+  }
 
   return (
     <div className="pa4 tc">
@@ -24,7 +53,7 @@ const ProfileIcon = ({ toggleModal, onRouteChange }) => {
           style={{ backgroundColor: 'rgba(255, 255, 255, 0.5)' }}
         >
           <DropdownItem onClick={toggleModal}>View Profile</DropdownItem>
-          <DropdownItem onClick={() => onRouteChange('signout')}>Sign Out</DropdownItem>
+          <Link to='/' style={{ textDecoration: 'none' }} onClick={() => handleSignout()}><DropdownItem>Sign Out</DropdownItem></Link>
         </DropdownMenu>
       </Dropdown>
     </div>

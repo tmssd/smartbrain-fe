@@ -1,14 +1,16 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loadUser } from '../../features/user/userSlice';
 import { useGetSigninUserMutation, useGetSigninUserProfileMutation } from '../../features/api/apiSlice';
 import './Signin.css'
 
-const Signin = ({ onRouteChange }) => {
+const Signin = () => {
 
   const [signInEmail, setSignInEmail] = useState('');
   const [signInPassword, setSignInPassword] = useState('');
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const saveAuthTokenInSession = (token) => {
@@ -57,7 +59,7 @@ const Signin = ({ onRouteChange }) => {
             .then(user => {
               if (user && user.email) {
                 dispatch(loadUser(user));
-                onRouteChange('home');
+                navigate('/user', { replace: true });
               }
             })
             .catch(console.log)
@@ -100,7 +102,7 @@ const Signin = ({ onRouteChange }) => {
               value="Sign in" />
           </div>
           <div className="lh-copy mt3">
-            <p onClick={() => onRouteChange('register')} className="f6 link dim black db pointer">Register</p>
+            <Link to='/register' className="f6 link dim black db pointer">Register</Link>
           </div>
         </div>
       </main>
