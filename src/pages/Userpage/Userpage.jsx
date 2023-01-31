@@ -5,8 +5,8 @@ import {
   useUpdateUserImageEntriesMutation,
   useGetSigninUserMutation,
   useGetSigninUserProfileMutation,
-} from '../../features/api/apiSlice';
-import { loadUser } from '../../features/user/userSlice';
+} from '../../store/reducers/api/apiSlice';
+import { loadUser } from '../../store/reducers/user/userSlice';
 import FaceRecognition from '../../components/FaceRecognition/FaceRecognition.jsx';
 import ImageLinkForm from '../../components/ImageLinkForm/ImageLinkForm.jsx';
 import Logo from '../../components/Logo/Logo.jsx';

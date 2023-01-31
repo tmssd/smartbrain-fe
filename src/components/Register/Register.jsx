@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { loadUser } from '../../features/user/userSlice';
-import { useGetRegisterUserMutation } from '../../features/api/apiSlice';
+import { loadUser } from '../../store/reducers/user/userSlice';
+import { useGetRegisterUserMutation } from '../../store/reducers/api/apiSlice';
 
 const Register = () => {
   const [registerEmail, setRegisterEmail] = useState('');

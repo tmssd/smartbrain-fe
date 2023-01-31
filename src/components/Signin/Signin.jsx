@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { loadUser } from '../../features/user/userSlice';
-import { useGetSigninUserMutation, useGetSigninUserProfileMutation } from '../../features/api/apiSlice';
+import { loadUser } from '../../store/reducers/user/userSlice';
+import { useGetSigninUserMutation, useGetSigninUserProfileMutation } from '../../store/reducers/api/apiSlice';
 import './Signin.css'
 
 const Signin = () => {
