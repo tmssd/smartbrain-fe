@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Userpage } from '../pages/Userpage/Userpage';
-import { Notfoundpage } from '../pages/Notfoundpage/Notfoundpage';
+import { Userpage } from '../pages/UserPage/UserPage';
+import { Notfoundpage } from '../pages/NotFoundPage/NotFoundPage';
 import { Layout } from '../components/Layout/Layout';
 import { Routes, Route } from 'react-router-dom';
 import Signin from '../components/Signin/Signin.jsx';
