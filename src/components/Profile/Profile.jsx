@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadUser } from '../../store/reducers/user/userSlice';
-import { useGetUpdateUserProfileMutation } from '../../store/reducers/api/apiSlice';
+import { loadUser } from '../../store/slices/user/userSlice';
+import { useGetUpdateUserProfileMutation } from '../../store/slices/api/apiSlice';
 import './Profile.css';
 
 

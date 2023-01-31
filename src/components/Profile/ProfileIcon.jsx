@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useDeleteLogoutUserTokenMutation } from '../../store/reducers/api/apiSlice.js';
-import { resetUser } from '../../store/reducers/user/userSlice';
+import { useDeleteLogoutUserTokenMutation } from '../../store/slices/api/apiSlice.js';
+import { resetUser } from '../../store/slices/user/userSlice';
 import {
   Dropdown,
   DropdownToggle,
