@@ -3,6 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import App from './App';
+// import { renderTestApp } from './tests/helpers/renderTestApp';
 
 describe('App Component', () => {
   test('renders Email label', () => {
@@ -13,6 +14,7 @@ describe('App Component', () => {
         </MemoryRouter>
       </Provider>
     );
+    // renderTestApp(<App />)
     const linkElement = screen.getByText(/email/i);
     expect(linkElement).toBeInTheDocument();
   });
